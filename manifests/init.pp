@@ -3,17 +3,13 @@
 # Install clamav
 #
 class clamav (
-  $whitelist_sig = [],
-  $whitelist_sha = [],
-  $whitelist_md5 = [],
-  $package_ensure = $clamav::params::package_ensure,
+  Array $whitelist_sig = [],
+  Array $whitelist_sha = [],
+  Array $whitelist_md5 = [],
+  $package_ensure      = $clamav::params::package_ensure,
 ) inherits clamav::params {
   include clamav::package
   include clamav::params
-
-  validate_array($whitelist_sig)
-  validate_array($whitelist_sha)
-  validate_array($whitelist_md5)
 
   $whitelist_sig_count = count($whitelist_sig)
   $whitelist_sha_count = count($whitelist_sha)

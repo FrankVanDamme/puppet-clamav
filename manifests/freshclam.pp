@@ -48,7 +48,6 @@ class clamav::freshclam (
 
   # $enable means the cron job
   if ( $::facts['os']['family'] == 'Debian' and $enable == false ) {
-      notify{"Deb fact":}
     service { "clamav-freshclam":
       ensure    => running,
       subscribe => File[ $clamav::params::freshclam_config_file ],

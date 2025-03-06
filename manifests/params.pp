@@ -1,5 +1,5 @@
 class clamav::params {
-  case $::osfamily {
+  case $facts[os][family] {
     'Debian': {
       $user = 'clamav'
       $package = 'clamav'

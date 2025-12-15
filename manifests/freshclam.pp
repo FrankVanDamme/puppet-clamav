@@ -13,8 +13,11 @@
 # <code>clamav::freshclam::proxy_port</code>: http proxy port
 # <code>clamav::freshclam::proxy_server</code>: http proxy server
 #
+# @param service_ensure: op Debian, indien cron job disabled
+#
 class clamav::freshclam (
   Boolean $enable        = true,
+  String $service_ensure = running,
   Integer $minute        = fqdn_rand(59),
   Integer $hour          = fqdn_rand(23),
   String $command        = '/usr/bin/freshclam --quiet',
@@ -49,7 +52,7 @@ class clamav::freshclam (
   # $enable means the cron job
   if ( $::facts['os']['family'] == 'Debian' and $enable == false ) {
     service { "clamav-freshclam":
-      ensure    => running,
+      ensure    => $service_ensure,
       subscribe => File[ $clamav::params::freshclam_config_file ],
     }
   }

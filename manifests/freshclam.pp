@@ -26,11 +26,17 @@ class clamav::freshclam (
   String $proxy_username = '',
   String $proxy_password = '',
   String $logfile        = '/var/log/clamav/freshclam.log',
+  String $package_ensure = $clamav::params::package_ensure,
 ) {
   include clamav::params
 
+  $ensure = $package_ensure ? {
+    /(absent|purged)/ => absent,
+    default       => present,
+    }
+
   file { $clamav::params::freshclam_config_file:
-    ensure  => present,
+    ensure  => $ensure,
     owner   => $clamav::params::user,
     mode    => $clamav::params::freshclam_config_file_mode,
     content => template('clamav/freshclam.conf.erb'),
@@ -70,7 +76,7 @@ class clamav::freshclam (
 
   # ensure proper permissions on our logfile
   file { $logfile:
-    ensure  => present,
+    ensure  => $ensure,
     owner   => $clamav::params::user,
     mode    => '0644',
     require => File[ $clamav::params::freshclam_config_file],

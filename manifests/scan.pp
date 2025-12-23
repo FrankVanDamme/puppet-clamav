@@ -67,6 +67,7 @@ define clamav::scan (
   $action_ok = '',
   $action_virus = '',
   $enable = true,
+  $ensure = present,
   $hour = fqdn_rand(23,$title),
   $minute = fqdn_rand(59,$title),
   $month = 'UNSET',
@@ -99,7 +100,7 @@ define clamav::scan (
   }
 
   file { $scancmd:
-    ensure  => present,
+    ensure  => $ensure,
     owner   => $clamav::params::user,
     mode    => '0500',
     content => template('clamav/scan.sh.erb'),

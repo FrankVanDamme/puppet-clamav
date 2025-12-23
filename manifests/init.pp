@@ -34,26 +34,28 @@ class clamav (
     require => Class['clamav::package'],
   }
 
-  file { [ '/etc/clamav', '/etc/clamav/scans' ]:
-    ensure  => directory,
-  }
+  if ( ! $package_ensure in ['purged', 'absent']){
+    file { [ '/etc/clamav', '/etc/clamav/scans' ]:
+      ensure  => directory,
+    }
 
-  file { '/var/lib/clamav/local.ign2':
-    ensure  => $whitelist_sig_ensure,
-    content => template('clamav/whitelist.ign2.erb')
-  }
+    file { '/var/lib/clamav/local.ign2':
+      ensure  => $whitelist_sig_ensure,
+      content => template('clamav/whitelist.ign2.erb')
+    }
 
-  file { '/var/lib/clamav/local.sfp':
-    ensure  => $whitelist_sha_ensure,
-    content => template('clamav/whitelist.sfp.erb')
-  }
+    file { '/var/lib/clamav/local.sfp':
+      ensure  => $whitelist_sha_ensure,
+      content => template('clamav/whitelist.sfp.erb')
+    }
 
-  file { '/var/lib/clamav/local.fp':
-    ensure  => $whitelist_md5_ensure,
-    content => template('clamav/whitelist.fp.erb')
-  }
+    file { '/var/lib/clamav/local.fp':
+      ensure  => $whitelist_md5_ensure,
+      content => template('clamav/whitelist.fp.erb')
+    }
 
-  file { '/var/log/clamav':
-      ensure => directory,
+    file { '/var/log/clamav':
+        ensure => directory,
+    }
   }
 }
